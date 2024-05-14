@@ -1,33 +1,74 @@
-# Fyle Backend Challenge
+# Fyle Backend Challenge 2024
 
-## Who is this for?
+## Installation (WINDOWS PowerShell)
 
-This challenge is meant for candidates who wish to intern at Fyle and work with our engineering team. You should be able to commit to at least 6 months of dedicated time for internship.
-
-## Why work at Fyle?
-
-Fyle is a fast-growing Expense Management SaaS product. We are ~40 strong engineering team at the moment. 
-
-We are an extremely transparent organization. Check out our [careers page](https://careers.fylehq.com) that will give you a glimpse of what it is like to work at Fyle. Also, check out our Glassdoor reviews [here](https://www.glassdoor.co.in/Reviews/Fyle-Reviews-E1723235.htm). You can read stories from our teammates [here](https://stories.fylehq.com).
+1. Fork this repository to your github account
+2. Clone the forked repository and proceed with steps mentioned below
 
 
-## Challenge outline
+### Install requirements
 
-**You are allowed to use any online/AI tool such as ChatGPT, Gemini, etc. to complete the challenge. However, we expect you to fully understand the code and logic involved.**
+```
+virtualenv env
+env/scripts/activate
+pip install -r requirements.txt
+```
+### Reset DB
 
-This challenge involves writing a backend service for a classroom. The challenge is described in detail [here](./Application.md)
+```
+$ENV:FLASK_APP="core/server.py"
+del core/store.sqlite3
+flask db upgrade -d core/migrations/
+```
+### Start Server
 
+```
+flask run
+```
+### Run Tests
 
-## What happens next?
+```
 
-You will hear back within 48 hours from us via email. 
+# for test coverage report
+# pytest --cov
+
+```
+## Creating Docker Image
+1.Create Dockerfile inside directory
+2.Add the commands :
+```
+FROM python:3.9-slim
+
+WORKDIR /app
+
+COPY . /app
+
+RUN pip install --no-cache-dir -r requirements.txt
+
+EXPOSE 5000
+
+ENV FLASK_APP="core/server.py"
+
+RUN flask db upgrade -d core/migrations/
+
+CMD ["flask", "run", "--host=0.0.0.0"]
+```
+
+3.Run the command in terminal to create Docker image 
+```
+docker build -t fyle-backend .
+```
+4.Run the command to run image-container(Make Sure you have Docker-Desktop and it is running) (port can be changed as well).
+```
+docker run -p 5000:5000 fyle-backend
+```
+
 
 
 ## Installation
 
 1. Fork this repository to your github account
 2. Clone the forked repository and proceed with steps mentioned below
-
 ### Install requirements
 
 ```
@@ -56,3 +97,4 @@ pytest -vvv -s tests/
 # pytest --cov
 # open htmlcov/index.html
 ```
+

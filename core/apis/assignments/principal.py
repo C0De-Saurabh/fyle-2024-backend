@@ -27,14 +27,14 @@ def list_teachers(p):
     teachers_dump = teacher_schema.dump(teachers)
     return jsonify(teachers_dump)
 
+
 @principal_resources.route('/assignments/grade', methods=['POST'], strict_slashes=False)
 @decorators.accept_payload
 @decorators.authenticate_principal
 def grade_principal_assignment(principal, incoming_payload):
     """Grade or re-grade an assignment"""
     grade_assignment_payload = AssignmentGradeSchema().load(incoming_payload)
-
-    graded_assignment = Assignment.mark_grade(
+    graded_assignment = Assignment.mark_grade_principal(
         _id=grade_assignment_payload.id,
         grade=grade_assignment_payload.grade,
         auth_principal=principal

@@ -20,6 +20,7 @@ def accept_payload(func):
     return wrapper
 
 
+
 def authenticate_principal(func):
     @wraps(func)
     def wrapper(*args, **kwargs):

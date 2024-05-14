@@ -1,0 +1,29 @@
+version: '3.8'
+services:
+  web:
+    build:
+    ports:
+      - "5000:5000"
+    environment:
+      FLASK_APP: "core/server.py"
+      FLASK_ENV: "development"
+      SQLALCHEMY_DATABASE_URI: "mysql+pymysql://myuser:mypassword@db:3306/mydatabase"
+    volumes:
+      - .:/app
+    depends_on:
+      - db
+
+  db:
+    image: mysql:latest
+    environment:
+      MYSQL_DATABASE: mydatabase
+      MYSQL_USER: myuser
+      MYSQL_PASSWORD: mypassword
+      MYSQL_ROOT_PASSWORD: rootpassword
+    ports:
+      - "3306:3306"
+    volumes:
+      - db-data:/var/lib/mysql
+
+volumes:
+  db-data:

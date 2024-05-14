@@ -99,3 +99,41 @@ def test_grade_assignment_draft_assignment(client, h_teacher_1):
     data = response.json
 
     assert data['error'] == 'FyleError'
+
+
+#added tests in teacher grading and assignment
+
+#Test for grading an assignment with an invalid assignment ID:
+def test_grade_assignment_invalid_id(client, h_teacher_1):
+    response = client.post(
+        '/teacher/assignments/grade',
+        headers=h_teacher_1,
+        json={
+            "id": -1,
+            "grade": "A"
+        }
+    )
+
+    assert response.status_code == 404
+    data = response.json
+
+    assert data['error'] == 'FyleError'
+
+     
+
+#Test for grading an assignment that has already been graded:
+def test_grade_already_graded_assignment(client, h_teacher_1):
+    response = client.post(
+        '/teacher/assignments/grade',
+        headers=h_teacher_1,
+        json={
+            "id": 3,
+            "grade": "B"
+        }
+    )
+
+    assert response.status_code == 400
+    data = response.json
+
+    assert data['error'] == 'FyleError'
+
